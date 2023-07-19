@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'books_app',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -54,7 +56,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:1337'
+]
 ROOT_URLCONF = 'hello_django.urls'
 
 TEMPLATES = [
@@ -79,16 +83,17 @@ WSGI_APPLICATION = 'hello_django.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
+if DEBUG:
+    DATABASES = {
     'default': {
-        'ENGINE': env('SQL_ENGINE'),
-        'NAME': env('SQL_DATABASE'),
-        "USER": env("SQL_USER"),
-        "PASSWORD": env("SQL_PASSWORD"),
-        "HOST": env("SQL_HOST"),
-        "PORT": env("SQL_PORT"),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }}
+else:
+    DATABASES = {
+        'default': env.db(),
     }
-}
+
 # print(DATABASES)
 
 # Password validation
@@ -125,7 +130,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
